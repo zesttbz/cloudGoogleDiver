@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h2 class="text-xl font-semibold mb-4">📤 Upload File</h2>
+
+<form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded shadow-md">
+  <input type="file" name="file" class="mb-4 block w-full border rounded p-2" required>
+  <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Upload</button>
+</form>
+{% endblock %}
