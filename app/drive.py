@@ -3,7 +3,7 @@ from googleapiclient.http import MediaFileUpload
 from google.oauth2.credentials import Credentials
 
 def get_drive_service():
-    creds = Credentials.from_authorized_user_file('token.json')
+    creds = Credentials.from_authorized_user_file('credentials.json', ['https://www.googleapis.com/auth/drive.file'])
     return build('drive', 'v3', credentials=creds)
 
 def upload_file(filepath, filename, mimetype):
