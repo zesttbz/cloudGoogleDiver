@@ -1,5 +1,9 @@
 Flask
 fastapi
+flask-login
+flask-wtf 
+flask-sqlalchemy
+flask-bcrypt
 uvicorn
 google-api-python-client
 google-auth-httplib2

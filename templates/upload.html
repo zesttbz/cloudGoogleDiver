@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .drag-drop-area {
+            width: 100%;
+            height: 200px;
+            border: 2px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .drag-drop-area.drag-over {
+            border-color: #2a9d8f;
+            color: #2a9d8f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Upload File</h1>
+        <form method="POST" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+            <div id="drag-drop-area" class="drag-drop-area">
+                <p>Drag & Drop your file here, or click to select</p>
+                <input type="file" name="file" id="file" style="display: none;" />
+            </div>
+            <button type="submit" class="btn btn-primary mt-3" style="display: none;">Upload File</button>
+        </form>
+    </div>
+    
+    <script>
+        const dragDropArea = document.getElementById('drag-drop-area');
+        const fileInput = document.getElementById('file');
+        const submitButton = document.querySelector('button[type="submit"]');
+
+        dragDropArea.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            dragDropArea.classList.add('drag-over');
+        });
+
+        dragDropArea.addEventListener('dragleave', function() {
+            dragDropArea.classList.remove('drag-over');
+        });
+
+        dragDropArea.addEventListener('drop', function(event) {
+            event.preventDefault();
+            dragDropArea.classList.remove('drag-over');
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                submitButton.style.display = 'inline-block';
+            }
+        });
+
+        dragDropArea.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files.length > 0) {
+                submitButton.style.display = 'inline-block';
+            }
+        });
+    </script>
+</body>
+</html>
