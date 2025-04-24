@@ -3,19 +3,22 @@ FROM php:7.4-apache
 # Cài Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Cài các phần mở rộng cần thiết
-RUN apt-get update && apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev && \
-    docker-php-ext-install pdo && \
-    docker-php-ext-install pdo_mysql
+# Cài extension + git + unzip + zip để composer hoạt động
+RUN apt-get update && apt-get install -y \
+    unzip zip git curl libzip-dev && \
+    docker-php-ext-install zip pdo pdo_mysql
 
-# Copy mã nguồn
+# Copy mã nguồn vào container
 COPY . /var/www/html/
 
-# Làm việc tại thư mục web root
-WORKDIR /var/www/html
+# Set working dir
+WORKDIR /var/www/html/
 
-# Cài đặt thư viện PHP
-RUN composer install
+# Cài thư viện PHP
+RUN composer install --no-interaction --prefer-dist
 
+# Mở cổng 80
 EXPOSE 80
+
+# Chạy Apache
 CMD ["apache2-foreground"]
