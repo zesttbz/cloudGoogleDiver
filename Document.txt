@@ -1,0 +1,54 @@
+Hướng Dẫn Cấu Hình Google Drive API v3
+Tác giả: Harry Vu (FoxN)
+Theo dõi Facebook để chờ mình up video hướng dẫn Setup chi tiết: https://www.facebook.com/harryvu205/
+1. Thiết Lập Project
+Truy cập Google Cloud Console
+
+Mở Google Cloud Console
+Tạo project mới hoặc chọn project có sẵn
+
+Kích Hoạt Google Drive API
+
+Vào "APIs & Services" > "Library"
+Tìm "Google Drive API"
+Click "Enable"
+
+2. Tạo Credentials
+Tạo Service Account
+
+Vào "APIs & Services" > "Credentials"
+Click "Create Credentials" > "Service Account"
+Điền thông tin:
+
+Service account name
+Service account ID (tự động)
+Description (tùy chọn)
+
+
+Click "Create and Continue"
+Thêm role: "Project" > "Editor"
+Click "Done"
+
+Tạo JSON Key
+
+Click vào service account vừa tạo
+Tab "Keys" > "Add Key" > "Create new key"
+Chọn JSON format
+Tải và lưu file JSON
+
+3. Cấu Hình OAuth 2.0
+OAuth Consent Screen
+
+Vào "OAuth consent screen"
+Chọn User Type: External/Internal
+Điền thông tin cần thiết:
+CopyApp name: [Tên ứng dụng]
+User support email: [Email]
+Developer contact email: [Email]
+
+
+Tạo OAuth Client ID
+
+Vào "Credentials"
+Click "Create Credentials" > "OAuth client ID"
+Chọn Application type phù hợp

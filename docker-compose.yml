@@ -1,0 +1,24 @@
+version: "3.5"
+
+volumes:
+  mysql_dt: {}
+
+services:
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+
+  db:
+    image: mysql:5.7
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-password}
+      MYSQL_USER: ${DB_USERNAME:-homestead}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-password}
+      MYSQL_DATABASE: ${DB_DATABASE:-homestead}
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_dt:/var/lib/mysql
