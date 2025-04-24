@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: python-upload-file-google-drive
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn app:app --host 0.0.0.0 --port 8080"
+    envVars:
+      - key: GOOGLE_DRIVE_API_CREDENTIALS
+        value: credentials.json
