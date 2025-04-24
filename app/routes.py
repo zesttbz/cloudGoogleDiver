@@ -13,6 +13,12 @@ from urllib.parse import urlparse, parse_qs
 
 app_routes = Blueprint('app_routes', __name__)
 
+SERVICE_ACCOUNT_FILE = os.path.join(os.path.dirname(__file__), 'credentials.json')
+creds = service_account.Credentials.from_service_account_file(
+    SERVICE_ACCOUNT_FILE,
+    scopes=["https://www.googleapis.com/auth/drive"]
+)
+
 
 # Route xử lý tải file từ Google Drive
 def extract_file_id(drive_link):
