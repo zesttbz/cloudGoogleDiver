@@ -3,6 +3,7 @@ require 'vendor/autoload.php';
 
 session_start();
 
+
 $client = new Google_Client();
 $client->setAuthConfig('credentials.json');
 $client->addScope(Google_Service_Drive::DRIVE_FILE);
@@ -44,3 +45,4 @@ $file = $service->files->create($fileMetadata, [
 
 echo "<h3>✅ Thành công!</h3>";
 echo "🔗 Link: <a href='{$file->webViewLink}' target='_blank'>Xem file</a>";
+file_put_contents('credentials.json', getenv('GOOGLE_CREDENTIALS'));
