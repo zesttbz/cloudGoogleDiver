@@ -1,21 +1,55 @@
-{% extends 'layout.html' %}
-{% block content %}
-<h2 class="text-2xl font-semibold mb-6">📁 Your Files</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard</title>
+  <style>
+    body { font-family: Arial; background: #f8f9fa; padding: 20px; }
+    h1 { color: #333; }
+    table { width: 100%; border-collapse: collapse; background: white; }
+    th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+    th { background: #f1f1f1; }
+    a { text-decoration: none; color: #007bff; }
+    .logout { float: right; }
+  </style>
+</head>
+<body>
+  <h1>Xin chào {{ user.username }}!</h1>
+  <a href="/logout" class="logout">🔓 Đăng xuất</a>
+  <h2>📁 Danh sách file đã upload</h2>
+  <h3>📄 Copy file từ Google Drive</h3>
+<form action="/copy" method="POST">
+  <input type="text" name="drive_link" placeholder="Dán link Google Drive vào đây" style="width: 70%; padding: 8px;" required>
+  <button type="submit">Copy file</button>
+</form>
 
-<a href="/upload" class="inline-block mb-4 bg-green-500 text-white px-4 py-2 rounded">Upload File</a>
 
-<div class="bg-white p-4 shadow rounded">
   {% if files %}
-    <ul>
-      {% for file in files %}
-        <li class="border-b py-2 flex justify-between">
-          <span>{{ file.filename }}</span>
-          <a class="text-blue-500" href="/download/{{ file.drive_id }}">Download</a>
-        </li>
-      {% endfor %}
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Tên file</th>
+          <th>ID trên Google Drive</th>
+          <th>Link tải</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for file in files %}
+          <tr>
+            <td>{{ file.name }}</td>
+            <td>{{ file.drive_id }}</td>
+            <td>
+                <a href="https://drive.google.com/uc?id={{ file.drive_id }}&export=download" target="_blank">Tải</a> |
+                <form action="/delete/{{ file.id }}" method="post" style="display:inline;" onsubmit="return confirm('Xác nhận xoá?')">
+                  <button type="submit" style="color: red; background: none; border: none; cursor: pointer;">Xoá</button>
+                </form>
+              </td>              
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   {% else %}
-    <p>No files uploaded yet.</p>
+    <p>Bạn chưa upload file nào.</p>
   {% endif %}
-</div>
-{% endblock %}
+</body>
+</html>
