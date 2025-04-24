@@ -120,7 +120,7 @@ def register():
         flash('Tên người dùng đã tồn tại. Vui lòng chọn tên khác.', 'warning')
         return redirect(url_for('app_routes.index'))
 
-    hashed_pw = generate_password_hash(password, method='sha256')
+    generate_password_hash(password, method='pbkdf2:sha256')
     new_user = User(username=username, password=hashed_pw)
     db.session.add(new_user)
     db.session.commit()
