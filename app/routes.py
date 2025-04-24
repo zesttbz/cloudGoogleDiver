@@ -99,11 +99,11 @@ def delete_file(file_id):
     return redirect(url_for('app_routes.dashboard'))
 
 
-# Trang chủ
+@app_routes.route("/")
 @app_routes.route("/index")
 @app_routes.route("/index.html")
-def index_alias():
-    return redirect(url_for('app_routes.index'))
+def index():
+    return render_template("index.html")
 
 
 # Route xử lý đăng kí
