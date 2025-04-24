@@ -100,9 +100,10 @@ def delete_file(file_id):
 
 
 # Trang chủ
-@app_routes.route('/')
-def index():
-    return render_template('index.html')
+@app_routes.route("/index")
+@app_routes.route("/index.html")
+def index_alias():
+    return redirect(url_for('app_routes.index'))
 
 
 # Route xử lý đăng kí
@@ -120,7 +121,7 @@ def register():
         flash('Tên người dùng đã tồn tại. Vui lòng chọn tên khác.', 'warning')
         return redirect(url_for('app_routes.index'))
 
-    generate_password_hash(password, method='pbkdf2:sha256')
+    hashed_pw = generate_password_hash(password, method='pbkdf2:sha256')
     new_user = User(username=username, password=hashed_pw)
     db.session.add(new_user)
     db.session.commit()
