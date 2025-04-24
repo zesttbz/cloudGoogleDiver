@@ -1,60 +1,42 @@
 <?php
+require __DIR__ . '/../vendor/autoload.php';
 
-/**
- * Laravel - A PHP Framework For Web Artisans
- *
- * @package  Laravel
- * @author   Taylor Otwell <taylor@laravel.com>
- */
+function uploadToDrive($tmpPath, $fileName) {
+    $client = new Google_Client();
+    $client->setAuthConfig(__DIR__ . '/../credentials.json');
+    $client->addScope(Google_Service_Drive::DRIVE);
 
-define('LARAVEL_START', microtime(true));
+    $service = new Google_Service_Drive($client);
 
-/*
-|--------------------------------------------------------------------------
-| Register The Auto Loader
-|--------------------------------------------------------------------------
-|
-| Composer provides a convenient, automatically generated class loader for
-| our application. We just need to utilize it! We'll simply require it
-| into the script here so that we don't have to worry about manual
-| loading any of our classes later on. It feels great to relax.
-|
-*/
+    $fileMetadata = new Google_Service_Drive_DriveFile([
+        'name' => $fileName
+    ]);
 
-require __DIR__.'/../vendor/autoload.php';
+    $content = file_get_contents($tmpPath);
 
-/*
-|--------------------------------------------------------------------------
-| Turn On The Lights
-|--------------------------------------------------------------------------
-|
-| We need to illuminate PHP development, so let us turn on the lights.
-| This bootstraps the framework and gets it ready for use, then it
-| will load up this application so that we can run it and send
-| the responses back to the browser and delight our users.
-|
-*/
+    $file = $service->files->create($fileMetadata, [
+        'data' => $content,
+        'mimeType' => mime_content_type($tmpPath),
+        'uploadType' => 'multipart',
+        'fields' => 'id'
+    ]);
 
-$app = require_once __DIR__.'/../bootstrap/app.php';
+    $permission = new Google_Service_Drive_Permission([
+        'type' => 'anyone',
+        'role' => 'reader'
+    ]);
+    $service->permissions->create($file->id, $permission);
 
-/*
-|--------------------------------------------------------------------------
-| Run The Application
-|--------------------------------------------------------------------------
-|
-| Once we have the application, we can handle the incoming request
-| through the kernel, and send the associated response back to
-| the client's browser allowing them to enjoy the creative
-| and wonderful application we have prepared for them.
-|
-*/
+    return "https://drive.google.com/uc?id=" . $file->id;
+}
 
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
+    $url = uploadToDrive($_FILES['file']['tmp_name'], $_FILES['file']['name']);
+    echo "✅ File uploaded: <a href='$url' target='_blank'>$url</a>";
+}
+?>
 
-$response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
-);
-
-$response->send();
-
-$kernel->terminate($request, $response);
+<form method="POST" enctype="multipart/form-data">
+  <input type="file" name="file" required>
+  <button type="submit">Upload to Google Drive</button>
+</form>
