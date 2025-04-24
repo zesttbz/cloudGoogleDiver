@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Upload file lên Google Drive</title>
+  <title>Upload to Google Drive</title>
 </head>
 <body>
   <h2>Upload file lên Google Drive</h2>
