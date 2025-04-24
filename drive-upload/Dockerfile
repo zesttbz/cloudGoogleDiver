@@ -1,9 +1,9 @@
 FROM php:7.4-apache
 
-# Cài Composer
+# Cài composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Cài git, unzip, zip, libzip để Composer không lỗi
+# Cài zip, unzip, git, libzip
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -11,16 +11,18 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     && docker-php-ext-install zip pdo
 
-# Set thư mục làm việc
+# Copy code vào container
 WORKDIR /var/www/html/
-
-# Copy code vào image
 COPY . .
 
-# Cài thư viện PHP qua Composer
-RUN composer install --no-interaction --prefer-dist --no-dev
+# Cho phép composer chạy dưới quyền root
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
+# Cài thư viện PHP
+RUN composer install --no-interaction --prefer-dist
+
+# Mở port web
 EXPOSE 80
 
-# Chạy Apache
+# Khởi chạy Apache
 CMD ["apache2-foreground"]
